@@ -44,6 +44,25 @@ const GMapsLayerView = widgets.WidgetView.extend({
 })
 
 
+export const PolylineLayerView = GMapsLayerView.extend({
+    render() {
+        GoogleMapsLoader.load((google) => {
+            this.polyline = new google.maps.Polyline({
+                path: this.model.get("data"),
+                geodesic: this.model.get("geodesic"),
+                strokeColor: this.model.get("stroke_color"),
+                strokeOpacity: this.model.get("stroke_opacity"),
+                strokeWeight: this.model.get("stroke_weight")
+            }) ;
+        });
+    },
+
+    addToMapView(mapView) {
+        this.polyline.setMap(mapView.map)
+    }
+
+})
+
 export const DirectionsLayerView = GMapsLayerView.extend({
     render() {
         const rendererOptions = { map: this.mapView.map }
@@ -480,6 +499,13 @@ export const DirectionsLayerModel = GMapsLayerModel.extend({
     defaults: _.extend({}, GMapsLayerModel.prototype.defaults, {
         _view_name: "DirectionsLayerView",
         _model_name: "DirectionsLayerModel"
+    })
+});
+
+export const PolylineLayerModel = GMapsLayerModel.extend({
+    defaults: _.extend({}, GMapsLayerModel.prototype.defaults, {
+        _view_name: "PolylineLayerView",
+        _model_name: "PolylineLayerModel"
     })
 });
 
